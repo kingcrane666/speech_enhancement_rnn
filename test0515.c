@@ -20,7 +20,7 @@
 #define NUM          6               //number of microphone
 #define D            FRM_LEN         //half of the number of subband
 #define ORD2         (6*2*D)         //order of prototype low pass filter
-#define T60          200             //reverberation time�秒
+#define T60          200             //reverberation time
 #define ORD3         (T60*FS/1000/D) //order of subband filter
 #define ORD4         6         
 #define ORD6         10
@@ -1344,7 +1344,7 @@ void aec_srp_gsc(AEC_SRP_ST *st,        //当前待处理通道变量结构体�
 	//}
 
 
-	//计算功率谱和互功率谱
+	//�������ϵ��
 	for (mic0_power_sum = e0_power_sum = 0, k = 1; k < D; k++)
 	{
 		st->mic0_power[k] = ptrGCoh[0] * st->mic0_power[k] + ptrGCoh[1] * (mic_ana_re[0][k] * mic_ana_re[0][k] + mic_ana_im[0][k] * mic_ana_im[0][k]);
@@ -1786,90 +1786,6 @@ void aec_srp_gsc(AEC_SRP_ST *st,        //当前待处理通道变量结构体�
 			{
 				snr = 0.0f;
 			}
-
-
-			/*if(snr > 15.0f)
-			{
-				if(frame>=178)
-				{
-					i=i;
-				}
-				st->frame_success++;
-				for(k=1; k<D; k++) { peak_sub[k] = 0; }
-				for(peak=0.0f, j=n=0; n<AZ_NUM; n+=AZ_STEP)
-				{
-					for(acc2=0.0f, k=1; k<D; k++)
-					{
-						//相位加权
-						for(re[k]=0, m=0; m<NUM; m++) re[k] += re2[m][k]*wr[n][m][k] + im2[m][k]*wi[n][m][k];
-						for(im[k]=0, m=0; m<NUM; m++) im[k] += im2[m][k]*wr[n][m][k] - re2[m][k]*wi[n][m][k];
-						//计算此方向的信号功率
-						power_sub[k] = re[k]*re[k]+im[k]*im[k];
-						if(peak_sub[k]<power_sub[k])
-						{
-							peak_sub[k] = power_sub[k];
-							num_sub[k] = n;
-						}
-						acc2 += power_sub[k]*mic0_spec[k];
-					}
-					if(peak<acc2)
-					{
-						peak=acc2;
-						j=n;
-					}
-				}
-
-
-				//子带波达方向精搜�?
-				for(k=1; k<D; k++)
-				{
-					for(sub_azimuth=num_sub[k], i=num_sub[k]-AZ_STEP/2; i<num_sub[k]+AZ_STEP/2; i++)
-					{
-						n=i;
-						if(n<0) n += AZ_NUM;
-						if(n>AZ_NUM) n -= AZ_NUM;
-						for(re[k]=0, m=0; m<NUM; m++) re[k] += re2[m][k]*wr[n][m][k] + im2[m][k]*wi[n][m][k];
-						for(im[k]=0, m=0; m<NUM; m++) im[k] += im2[m][k]*wr[n][m][k] - re2[m][k]*wi[n][m][k];
-
-						acc2 = re[k]*re[k]+im[k]*im[k];
-						if(peak_sub[k]<acc2) {peak_sub[k]=acc2; sub_azimuth=n;}
-					}
-					st->sub_az[k] = sub_azimuth*2.0f*(Float32)PI/AZ_NUM;
-				}
-
-				//全带波达方向精搜�?
-				for(tot_az=j, i=j-AZ_STEP/2; i<=j+AZ_STEP/2; i++)
-				{
-					//角度映射到[0, 2*PI)区间
-					n=i;
-					if(n<0) n += AZ_NUM;
-					if(n>AZ_NUM) n -= AZ_NUM;
-
-					for(acc2=0.0f, k=1; k<D; k++)
-					{
-						//相位加权
-						for(re[k]=0, m=0; m<NUM; m++) re[k] += re2[m][k]*wr[n][m][k] + im2[m][k]*wi[n][m][k];
-						for(im[k]=0, m=0; m<NUM; m++) im[k] += im2[m][k]*wr[n][m][k] - re2[m][k]*wi[n][m][k];
-						//计算此方向的信号功率
-						acc2 += (re[k]*re[k]+im[k]*im[k])*mic0_spec[k];
-					}
-					if(peak<acc2)
-					{
-						peak=acc2;
-						tot_az=n;
-					}
-				}
-
-				for(j=0; j<MED_NUM-1; j++) st->audio_az[j]=st->audio_az[j+1];
-				st->audio_az[MED_NUM-1] = tot_az*2.0f*(Float32)PI/AZ_NUM;
-				if(fabs(get_position(st)-PI/2)<=PI/18)
-				//if(fabs(st->audio_az[MED_NUM-1]-PI/2)<=PI/18)
-				//if((fabs(get_position(st)-2*PI)<=PI/18)||(fabs(get_position(st))<=PI/18))
-				//if((fabs(st->audio_az[MED_NUM-1]-2*PI)<=PI/36)||(fabs(st->audio_az[MED_NUM-1])<=PI/36))
-				{
-					st->frame_locate++;
-				}
-			}*/
 		}
 	}
 
